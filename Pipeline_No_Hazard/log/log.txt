@@ -1,0 +1,65 @@
+
+20181119 19:35 EX.v
+	79行   if (ALUResult == 31'b0 && ALUOp == 2'b01)
+            		Zero = 1'b1;
+	改为    if (ALUResult == 31'b0 && ALUOp == 2'b01)
+            		Zero = 1'b1;
+        	           else
+            		Zero = 1'b0;
+
+20181119 20:09 EX.v
+	19行  output reg[31:0] ALUResult,
+	改为  output wire [31:0] ALUResult,
+
+20181119 20:11 EX.v
+	20行 output reg Zero,
+	改为 output wire Zero,
+
+20181119 21:35 ID.v
+	78~110行 MemToReg 修改 之前WB MUX理解的相反了	
+
+20181119 22:53 IF.v
+	80行 always @ (posedge clock)    begin
+	改为 always @ (negedge clock)    begin
+20181120 16:11 IF.v
+	80行 always @ (negedge clock)    begin
+	改为 always @ (posedge clock)    begin
+		是因为在没有forwarding的情况下无论beq执行与否，beq后三句话都会被执行，见本文件夹中的 beq bne 图片
+20181120 16:14 
+	MEM: 	1. 添加 Judge_BranchEq_Jin, Judge_BranchNeq_Jin 模块
+		2. MEM_Jin 添加接口 BranchEq BranchNeq, 添加 PCSrc = Wire_1 | Wire_2
+	EX_MEM_Register:
+		1. 添加接口 BranchEq_in, BranchEq_out, BranchNeq_in, BranchNeq_out
+	Execute:
+		1. 添加接口 BranchEq_in, BranchEq_out, BranchNeq_in, BranchNeq_out
+	ID_EX_Register:
+		1. 添加接口 BranchEq_in, BranchEq_out, BranchNeq_in, BranchNeq_out
+	Control:
+		1. 添加接口 BranchEq，BranchNeq
+		2. 添加控制信号 BranchEq，BranchNeq, 添加 bne 方法
+	ID:
+		1. 添加接口 BranchEq，BranchNeq
+	sim_8_Pipeline_No_Hazard:
+		1. 添加所有 BranchEq, BranchNeq 的接口
+
+20181120 19:29 
+	MEM:	1. 添加 PC_Jump_in, Jump_in，PC_Jump_out, Jump_out 的接口
+	EX_MEM_Register:
+		1. 添加 PC_Jump_in, Jump_in，PC_Jump_out, Jump_out 的接口
+	Execute: 	1. 添加 PC_Jump_in, Jump_in，PC_Jump_out, Jump_out 的接口
+	ID_EX_Register:
+		1. 添加 PC_Jump_in, Jump_in，PC_Jump_out, Jump_out 的接口
+	Control:	1. 添加 Jump 的接口
+		2. 添加所有控制信号 Jump 方法
+	ID:	1. 添加 PC_Jump_in, Jump_in，PC_Jump_out, Jump_out 的接口
+	IF:	1. 添加 PC_Jump, Jump 的接口
+		2. 添加一个 MUX 输入为 经过PCSrc的MUX的输出，以及PC_Jump，控制信号为 Jump, 输出为 PC_register的输入
+	sim_8_Pipeline_No_Hazard:
+		1. 添加 PC_Jump, Jump 的接口
+
+
+
+
+
+
+
